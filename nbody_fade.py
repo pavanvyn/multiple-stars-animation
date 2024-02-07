@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 # import mpl_toolkits.mplot3d.axes3d as p3
+from matplotlib.collections import LineCollection
 from matplotlib.animation import FuncAnimation
 from scipy.integrate import odeint
 
@@ -99,24 +100,24 @@ def func_adapt_dt(r_v,N_obj,m): # r_v (positions and velocities) and m (masses) 
 # r_v_0[9:12] = [- e_fac*v_12*m[0]/np.sum(m),0,0]
 
 
-# triple
-gifsave = "triple.gif"
-min_xyz,max_xyz = -150,150
-N_obj = 3
-# m = np.ones(N_obj)*10*MSun
-m = np.array([30,10,20])*MSun
-e_fac = 1.2 # np.sqrt(2) is the limit, 1 is circular
-r_12 = 15*AU
-v_12 = np.sqrt(G*np.sum(m[0:2])/r_12)
-r_in12_3 = 100*AU
-v_in12_3 = np.sqrt(G*np.sum(m)/r_in12_3)
-r_v_0 = np.zeros(N_obj*6)
-r_v_0[0:3] = [0, r_in12_3*(m[2]/np.sum(m)), r_12*(m[1]/np.sum(m[0:2]))]
-r_v_0[3:6] = [e_fac*v_in12_3*(m[2]/np.sum(m)) + e_fac*v_12*(m[1]/np.sum(m[0:2])), 0, 0]
-r_v_0[6:9] = [0, r_in12_3*(m[2]/np.sum(m)), - r_12*(m[0]/np.sum(m[0:2]))]
-r_v_0[9:12] = [e_fac*v_in12_3*(m[2]/np.sum(m)) - e_fac*v_12*(m[0]/np.sum(m[0:2])), 0, 0]
-r_v_0[12:15] = [0, - r_in12_3*(np.sum(m[0:2])/np.sum(m)), 0]
-r_v_0[15:18] = [- e_fac*v_in12_3*(np.sum(m[0:2])/np.sum(m)), 0, 0]
+# # triple
+# gifsave = "triple.gif"
+# min_xyz,max_xyz = -150,150
+# N_obj = 3
+# # m = np.ones(N_obj)*10*MSun
+# m = np.array([30,10,20])*MSun
+# e_fac = 1.2 # np.sqrt(2) is the limit, 1 is circular
+# r_12 = 15*AU
+# v_12 = np.sqrt(G*np.sum(m[0:2])/r_12)
+# r_in12_3 = 100*AU
+# v_in12_3 = np.sqrt(G*np.sum(m)/r_in12_3)
+# r_v_0 = np.zeros(N_obj*6)
+# r_v_0[0:3] = [0, r_in12_3*(m[2]/np.sum(m)), r_12*(m[1]/np.sum(m[0:2]))]
+# r_v_0[3:6] = [e_fac*v_in12_3*(m[2]/np.sum(m)) + e_fac*v_12*(m[1]/np.sum(m[0:2])), 0, 0]
+# r_v_0[6:9] = [0, r_in12_3*(m[2]/np.sum(m)), - r_12*(m[0]/np.sum(m[0:2]))]
+# r_v_0[9:12] = [e_fac*v_in12_3*(m[2]/np.sum(m)) - e_fac*v_12*(m[0]/np.sum(m[0:2])), 0, 0]
+# r_v_0[12:15] = [0, - r_in12_3*(np.sum(m[0:2])/np.sum(m)), 0]
+# r_v_0[15:18] = [- e_fac*v_in12_3*(np.sum(m[0:2])/np.sum(m)), 0, 0]
 
 
 # # 2+2 quadruple
@@ -143,28 +144,28 @@ r_v_0[15:18] = [- e_fac*v_in12_3*(np.sum(m[0:2])/np.sum(m)), 0, 0]
 # r_v_0[21:24] = [- e_fac*v_in12_in34*(np.sum(m[0:2])/np.sum(m)) - e_fac*v_34*(m[2]/np.sum(m[2:4])), 0, 0]
 
 
-# # 3+1 quadruple
-# gifsave = "3+1_quadruple.gif"
-# min_xyz,max_xyz = -500,500
-# N_obj = 4
-# # m = np.ones(N_obj)*10*MSun
-# m = np.array([40,10,30,20])*MSun
-# e_fac = 1.2 # np.sqrt(2) is the limit, 1 is circular
-# r_12 = 20*AU
-# v_12 = np.sqrt(G*np.sum(m[0:2])/r_12)
-# r_in12_3 = 80*AU
-# v_in12_3 = np.sqrt(G*np.sum(m[0:3])/r_in12_3)
-# r_mid123_4 = 350*AU
-# v_mid123_4 = np.sqrt(G*np.sum(m)/r_mid123_4)
-# r_v_0 = np.zeros(N_obj*6)
-# r_v_0[0:3] = [r_in12_3*(m[2]/np.sum(m[0:3])), r_mid123_4*(m[3]/np.sum(m)), r_12*(m[1]/np.sum(m[0:2]))]
-# r_v_0[3:6] = [e_fac*v_mid123_4*(m[3]/np.sum(m)) + e_fac*v_12*(m[1]/np.sum(m[0:2])), 0, e_fac*v_in12_3*(m[2]/np.sum(m[0:3]))]
-# r_v_0[6:9] = [r_in12_3*(m[2]/np.sum(m[0:3])), r_mid123_4*(m[3]/np.sum(m)), - r_12*(m[0]/np.sum(m[0:2]))]
-# r_v_0[9:12] = [e_fac*v_mid123_4*(m[3]/np.sum(m)) - e_fac*v_12*(m[0]/np.sum(m[0:2])), 0, e_fac*v_in12_3*(m[2]/np.sum(m[0:3]))]
-# r_v_0[12:15] = [- r_in12_3*(np.sum(m[0:2])/np.sum(m[0:3])), r_mid123_4*(m[3]/np.sum(m)), 0]
-# r_v_0[15:18] = [e_fac*v_mid123_4*(m[3]/np.sum(m)), 0, - e_fac*v_in12_3*(np.sum(m[0:2])/np.sum(m[0:3]))]
-# r_v_0[18:21] = [0, - r_mid123_4*(np.sum(m[0:3])/np.sum(m)), 0]
-# r_v_0[21:24] = [- e_fac*v_mid123_4*(np.sum(m[0:3])/np.sum(m)), 0, 0]
+# 3+1 quadruple
+gifsave = "3+1_quadruple.gif"
+min_xyz,max_xyz = -500,500
+N_obj = 4
+# m = np.ones(N_obj)*10*MSun
+m = np.array([40,10,30,20])*MSun
+e_fac = 1.2 # np.sqrt(2) is the limit, 1 is circular
+r_12 = 20*AU
+v_12 = np.sqrt(G*np.sum(m[0:2])/r_12)
+r_in12_3 = 80*AU
+v_in12_3 = np.sqrt(G*np.sum(m[0:3])/r_in12_3)
+r_mid123_4 = 350*AU
+v_mid123_4 = np.sqrt(G*np.sum(m)/r_mid123_4)
+r_v_0 = np.zeros(N_obj*6)
+r_v_0[0:3] = [r_in12_3*(m[2]/np.sum(m[0:3])), r_mid123_4*(m[3]/np.sum(m)), r_12*(m[1]/np.sum(m[0:2]))]
+r_v_0[3:6] = [e_fac*v_mid123_4*(m[3]/np.sum(m)) + e_fac*v_12*(m[1]/np.sum(m[0:2])), 0, e_fac*v_in12_3*(m[2]/np.sum(m[0:3]))]
+r_v_0[6:9] = [r_in12_3*(m[2]/np.sum(m[0:3])), r_mid123_4*(m[3]/np.sum(m)), - r_12*(m[0]/np.sum(m[0:2]))]
+r_v_0[9:12] = [e_fac*v_mid123_4*(m[3]/np.sum(m)) - e_fac*v_12*(m[0]/np.sum(m[0:2])), 0, e_fac*v_in12_3*(m[2]/np.sum(m[0:3]))]
+r_v_0[12:15] = [- r_in12_3*(np.sum(m[0:2])/np.sum(m[0:3])), r_mid123_4*(m[3]/np.sum(m)), 0]
+r_v_0[15:18] = [e_fac*v_mid123_4*(m[3]/np.sum(m)), 0, - e_fac*v_in12_3*(np.sum(m[0:2])/np.sum(m[0:3]))]
+r_v_0[18:21] = [0, - r_mid123_4*(np.sum(m[0:3])/np.sum(m)), 0]
+r_v_0[21:24] = [- e_fac*v_mid123_4*(np.sum(m[0:3])/np.sum(m)), 0, 0]
 
 # # Pythagorean 3-body
 # gifsave = "pythagorean.gif"
@@ -208,18 +209,29 @@ ax.xaxis.pane.fill = False
 ax.yaxis.pane.fill = False
 ax.zaxis.pane.fill = False
 
-trajectories = [ax.plot([],[],[],lw=2,color=colors[i])[0] for i in range(N_obj)]
+trajectories = [LineCollection([],lw=2,color=colors[i]) for i in range(N_obj)]
+for i in range(N_obj):
+    ax.add_collection3d(trajectories[i])
 particles = [ax.plot([],[],[],'o',markersize=np.sqrt(m[i]/MSun)*2,color=colors[i])[0] for i in range(N_obj)]
 ax.set_title('t = %.0f yr'%(t[0]/yr),fontsize=25)
 
-# function to update matplotlib plot for each frame
 def animate(t_step,N_obj,r_v,trajectories,particles,t):
     for i in range(N_obj):
         r = r_v[0:t_step+1,i,0:3]/AU # shape * X 3
         ax.set_title('t = %.0f yr'%(t[t_step]/yr),fontsize=25)
 
-        trajectories[i].set_data(r[:,0],r[:,1]) # X and Y axes
-        trajectories[i].set_3d_properties(r[:,2]) # Z axis
+        # plot each line segment individually with adjusted alpha
+        segments = []
+        alphas = []
+        for step in range(t_step):            
+            r1 = r[step:step+2,0]
+            r2 = r[step:step+2,1]
+            r3 = r[step:step+2,2]
+            segments.append( list(zip(r1,r2,r3)) )
+            alphas.append( max(0, 1.0 - 0.005 * (t_step - step)) ) # gradual change in alpha
+        alphas.append(1.0)
+        trajectories[i].set_segments(segments)
+        trajectories[i].set_alpha(alphas)
 
         particles[i].set_data(r[t_step:t_step+1,0],r[t_step:t_step+1,1]) # X and Y axes
         particles[i].set_3d_properties(r[t_step:t_step+1,2]) # Z axis
