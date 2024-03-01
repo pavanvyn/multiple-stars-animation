@@ -1,4 +1,4 @@
-# Create pretty animations of binaries, triples and quadruples
+# Create cool animations of binaries, triples and quadruples
 
 This is a `python3`-based simple N-body integrator and animator for 2-body, 3-body and 4-body systems. The initial conditions can be supplied in hierarchical coordinates: masses and orbital parameters, including semimajor axes, eccentricities, and orbital angles.
 
@@ -20,4 +20,4 @@ Other arguments control the animation itself, and are as follows:
 - `-L` or `--light_mode`, to switch the default dark mode to light
 - `-S` or `--save_gif`, to save the animation to a gif
 
-Enjoy creating pretty animations! A suite of pre-made animations are provided in this repository.
+Enjoy creating cool animations! A suite of pre-made animations are provided in this repository.
