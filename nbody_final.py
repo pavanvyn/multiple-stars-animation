@@ -283,7 +283,7 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-C","--configuration",help="configuration - bin, trip, 2p2quad, 3p1quad, custom (default)",default="custom")
+    parser.add_argument("-C","--configuration",help="configuration - bin, trip, 2p2quad, 3p1quad",default="trip")
     parser.add_argument("-m","--masses",help="list of masses in MSun",default=None)
     parser.add_argument("-a","--smaxes",help="list of semimajor axes in AU",default=None)
     parser.add_argument("-e","--eccs",help="list of eccentricities (between 0 and 1)",default=None)
@@ -292,7 +292,7 @@ if __name__ == '__main__':
     parser.add_argument("-w","--APs",help="list of arguments of periapsis in deg (between 0 and 360)",default=None)
     parser.add_argument("-t","--tAnos",help="list of true anomalies in deg (between 0 and 360)",default=None)
     parser.add_argument("-N","--N_steps",help="number of time steps",default=1000,type=int)
-    parser.add_argument("-F","--fade_factor",help="rate of fading trails (0 is no fade, < 0.05 for best results)",default=0.01,type=float)
+    parser.add_argument("-F","--fade_factor",help="rate of fading trajectory trails (0 is no fade, < 0.05 for best results)",default=0.01,type=float)
     parser.add_argument("-L","--light_mode",help="aimation in light mode (default dark)",action="store_true")
     parser.add_argument("-S","--save_gif",help="save GIF or not",action="store_true")
     args = parser.parse_args()
@@ -411,117 +411,6 @@ if __name__ == '__main__':
         r_v_0 = init_3p1quad(np.array(masses)*MSun,np.array(smaxes)*AU,np.array(eccs), np.array(incs)*np.pi/180, \
                              np.array(LANs)*np.pi/180,np.array(APs)*np.pi/180,np.array(tAnos)*np.pi/180)
 
-    elif configuration == "custom":
-        # # binary
-        # gifsave = "binary.gif"
-        # min_xyz,max_xyz = -150,150
-        # N_obj = 2
-        # # m = np.ones(N_obj)*10*MSun
-        # m = np.array([10,30])*MSun
-        # e_fac = 1.2 # np.sqrt(2) is the limit, 1 is circular
-        # r_12 = 80*AU
-        # v_12 = np.sqrt(G*np.sum(m[0:2])/r_12)
-        # r_v_0 = np.zeros(N_obj*6)
-        # r_v_0[0:3] = [0,r_12*m[1]/np.sum(m),0]
-        # r_v_0[3:6] = [e_fac*v_12*m[1]/np.sum(m),0,0]
-        # r_v_0[6:9] = [0,-r_12*m[0]/np.sum(m),0]
-        # r_v_0[9:12] = [- e_fac*v_12*m[0]/np.sum(m),0,0]
-
-        # triple
-        gifsave = "triple.gif"
-        min_xyz,max_xyz = -150,150
-        N_obj = 3
-        # m = np.ones(N_obj)*10*MSun
-        m = np.array([30,10,20])*MSun
-        e_fac = 1.2 # np.sqrt(2) is the limit, 1 is circular
-        r_12 = 15*AU
-        v_12 = np.sqrt(G*np.sum(m[0:2])/r_12)
-        r_in12_3 = 100*AU
-        v_in12_3 = np.sqrt(G*np.sum(m)/r_in12_3)
-        r_v_0 = np.zeros(N_obj*6)
-        r_v_0[0:3] = [0, r_in12_3*(m[2]/np.sum(m)), r_12*(m[1]/np.sum(m[0:2]))]
-        r_v_0[3:6] = [e_fac*v_in12_3*(m[2]/np.sum(m)) + e_fac*v_12*(m[1]/np.sum(m[0:2])), 0, 0]
-        r_v_0[6:9] = [0, r_in12_3*(m[2]/np.sum(m)), - r_12*(m[0]/np.sum(m[0:2]))]
-        r_v_0[9:12] = [e_fac*v_in12_3*(m[2]/np.sum(m)) - e_fac*v_12*(m[0]/np.sum(m[0:2])), 0, 0]
-        r_v_0[12:15] = [0, - r_in12_3*(np.sum(m[0:2])/np.sum(m)), 0]
-        r_v_0[15:18] = [- e_fac*v_in12_3*(np.sum(m[0:2])/np.sum(m)), 0, 0]
-
-        # # 2+2 quadruple
-        # gifsave = "2+2_quadruple.gif"
-        # min_xyz,max_xyz = -150,150
-        # N_obj = 4
-        # # m = np.ones(N_obj)*10*MSun
-        # m = np.array([40,20,30,10])*MSun
-        # e_fac = 1.2 # np.sqrt(2) is the limit, 1 is circular
-        # r_12 = 10*AU
-        # v_12 = np.sqrt(G*np.sum(m[0:2])/r_12)
-        # r_34 = 10*AU
-        # v_34 = np.sqrt(G*np.sum(m[2:4])/r_34)
-        # r_in12_in34 = 100*AU
-        # v_in12_in34 = np.sqrt(G*np.sum(m)/r_in12_in34)
-        # r_v_0 = np.zeros(N_obj*6)
-        # r_v_0[0:3] = [0, r_in12_in34*(np.sum(m[2:4])/np.sum(m)), r_12*(m[1]/np.sum(m[0:2]))]
-        # r_v_0[3:6] = [e_fac*v_in12_in34*(np.sum(m[2:4])/np.sum(m)) + e_fac*v_12*(m[1]/np.sum(m[0:2])), 0, 0]
-        # r_v_0[6:9] = [0, r_in12_in34*(np.sum(m[2:4])/np.sum(m)), - r_12*(m[0]/np.sum(m[0:2]))]
-        # r_v_0[9:12] = [e_fac*v_in12_in34*(np.sum(m[2:4])/np.sum(m)) - e_fac*v_12*(m[0]/np.sum(m[0:2])), 0, 0]
-        # r_v_0[12:15] = [0, - r_in12_in34*(np.sum(m[0:2])/np.sum(m)), r_34*(m[3]/np.sum(m[2:4]))]
-        # r_v_0[15:18] = [- e_fac*v_in12_in34*(np.sum(m[0:2])/np.sum(m)) + e_fac*v_34*(m[3]/np.sum(m[2:4])), 0, 0]
-        # r_v_0[18:21] = [0, - r_in12_in34*(np.sum(m[0:2])/np.sum(m)), - r_34*(m[2]/np.sum(m[2:4]))]
-        # r_v_0[21:24] = [- e_fac*v_in12_in34*(np.sum(m[0:2])/np.sum(m)) - e_fac*v_34*(m[2]/np.sum(m[2:4])), 0, 0]
-
-        # # 3+1 quadruple
-        # gifsave = "3+1_quadruple.gif"
-        # min_xyz,max_xyz = -500,500
-        # N_obj = 4
-        # # m = np.ones(N_obj)*10*MSun
-        # m = np.array([40,10,30,20])*MSun
-        # e_fac = 1.2 # np.sqrt(2) is the limit, 1 is circular
-        # r_12 = 20*AU
-        # v_12 = np.sqrt(G*np.sum(m[0:2])/r_12)
-        # r_in12_3 = 80*AU
-        # v_in12_3 = np.sqrt(G*np.sum(m[0:3])/r_in12_3)
-        # r_mid123_4 = 350*AU
-        # v_mid123_4 = np.sqrt(G*np.sum(m)/r_mid123_4)
-        # r_v_0 = np.zeros(N_obj*6)
-        # r_v_0[0:3] = [r_in12_3*(m[2]/np.sum(m[0:3])), r_mid123_4*(m[3]/np.sum(m)), r_12*(m[1]/np.sum(m[0:2]))]
-        # r_v_0[3:6] = [e_fac*v_mid123_4*(m[3]/np.sum(m)) + e_fac*v_12*(m[1]/np.sum(m[0:2])), 0, e_fac*v_in12_3*(m[2]/np.sum(m[0:3]))]
-        # r_v_0[6:9] = [r_in12_3*(m[2]/np.sum(m[0:3])), r_mid123_4*(m[3]/np.sum(m)), - r_12*(m[0]/np.sum(m[0:2]))]
-        # r_v_0[9:12] = [e_fac*v_mid123_4*(m[3]/np.sum(m)) - e_fac*v_12*(m[0]/np.sum(m[0:2])), 0, e_fac*v_in12_3*(m[2]/np.sum(m[0:3]))]
-        # r_v_0[12:15] = [- r_in12_3*(np.sum(m[0:2])/np.sum(m[0:3])), r_mid123_4*(m[3]/np.sum(m)), 0]
-        # r_v_0[15:18] = [e_fac*v_mid123_4*(m[3]/np.sum(m)), 0, - e_fac*v_in12_3*(np.sum(m[0:2])/np.sum(m[0:3]))]
-        # r_v_0[18:21] = [0, - r_mid123_4*(np.sum(m[0:3])/np.sum(m)), 0]
-        # r_v_0[21:24] = [- e_fac*v_mid123_4*(np.sum(m[0:3])/np.sum(m)), 0, 0]
-
-        # # Pythagorean 3-body
-        # gifsave = "pythagorean.gif"
-        # min_xyz,max_xyz = -100,100
-        # N_obj = 3
-        # # m = np.ones(N_obj)*10*MSun
-        # m = np.array([30,40,50])*MSun
-        # r_v_0 = np.zeros(N_obj*6)
-        # r_v_0[0:3] = [50*AU , 150*AU , 0*AU]
-        # r_v_0[3:6] = [0 , 0 , 0.0]
-        # r_v_0[6:9] = [-100*AU , -50*AU , 0*AU]
-        # r_v_0[9:12] = [0 , 0 , 0]
-        # r_v_0[12:15] = [50*AU , -50*AU , 0*AU]
-        # r_v_0[15:18] = [0 , 0 , 0]
-
-        # # 4-body experiment
-        # gifsave = "fourbody.gif"
-        # min_xyz,max_xyz = -100,100
-        # N_obj = 4
-        # # m = np.ones(N_obj)*10*MSun
-        # m = np.array([25,25,25,25])*MSun
-        # r_v_0 = np.zeros(N_obj*6)
-        # r_v_0[0:3] = [50*AU , 100*AU , 0*AU]
-        # r_v_0[3:6] = [0 , 0 , 0.0]
-        # r_v_0[6:9] = [-100*AU , 75*AU , 0*AU]
-        # r_v_0[9:12] = [0 , 0 , 0]
-        # r_v_0[12:15] = [-50*AU , -100*AU , 0*AU]
-        # r_v_0[15:18] = [0 , 0 , 0]
-        # r_v_0[18:21] = [100*AU , -75*AU , 0*AU]
-        # r_v_0[21:24] = [0 , 0 , 0]
-
     else:
         print("Wrong input")
         exit()
@@ -564,13 +453,11 @@ if __name__ == '__main__':
     for i in range(N_obj):
         ax.add_collection3d(trajectories[i])
     particles = [ax.plot([],[],[],'o',markersize=np.sqrt(m[i]/sum(m))*20,color=colors[i])[0] for i in range(N_obj)]
-    # ax.set_title('t = %.0f yr'%(t[0]/yr),fontsize=25)
     
     fade_factor = args.fade_factor
     def animate(t_step,N_obj,r_v,trajectories,particles,t):
         for i in range(N_obj):
             r = r_v[0:t_step+1,i,0:3]/AU # shape * X 3
-            # ax.set_title('t = %.0f yr'%(t[t_step]/yr),fontsize=25)
 
             # plot each line segment individually with adjusted alpha
             segments = []
@@ -595,9 +482,6 @@ if __name__ == '__main__':
     ax.set_xlim3d([min_xyz,max_xyz])
     ax.set_ylim3d([min_xyz,max_xyz])
     ax.set_zlim3d([min_xyz,max_xyz])
-    # ax.set_xlabel('X [AU]',fontsize=15)
-    # ax.set_ylabel('Y [AU]',fontsize=15)
-    # ax.set_zlabel('Z [AU]',fontsize=15)
 
     plt.show()
     if args.save_gif:
