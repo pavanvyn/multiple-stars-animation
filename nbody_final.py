@@ -601,7 +601,7 @@ if __name__ == '__main__':
 
     plt.show()
     if args.save_gif:
-        anim.save('./gif/%s'%(gifsave))
+        anim.save('%s'%(gifsave))
 
     # CONVERT GIF TO MP4
     # ffmpeg -r 50 -i anim.gif anim.mp4
