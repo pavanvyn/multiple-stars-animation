@@ -2,7 +2,7 @@
 
 This is a `python3`-based simple N-body integrator and animator for 2-body, 3-body and 4-body systems. The initial conditions can be supplied in hierarchical coordinates: masses and orbital parameters, including semimajor axes, eccentricities, and orbital angles.
 
-There is one mandatory argument to be specified: `-C` or `--configuration`, which can be one of four configurations - `bin`, `trip`, `2p2quad`, `3p1quad` which stand for binary (`n_obj`= 2), triple (`n_obj`= 3), 2+2 quadruple (`n_obj`= 4) and 3+1 quadruple (`n_obj`= 4) respectively.
+There is one (mandatory) argument to be specified: `-C` or `--configuration`, which can be one of four configurations - `bin`, `trip`, `2p2quad`, `3p1quad` which stand for binary (`n_obj`= 2), triple (`n_obj`= 3), 2+2 quadruple (`n_obj`= 4) and 3+1 quadruple (`n_obj`= 4) respectively. If not specified, a triple animation is produced.
 
 The following arguments can be specified to change the initial parameters of a given configuration (it is necessary for these to be lists, even if there is only one element):
 - `-m` or `--masses`, a list of length `n_obj` of masses in solar mass units
@@ -19,3 +19,5 @@ Other arguments control the animation itself, and are as follows:
 - `-F` or `--fade_factor`, the rate of fading trajectory trails, the default being 0.05 (0 is no fade, < 0.05 for best results)
 - `-L` or `--light_mode`, to switch the default dark mode to light
 - `-S` or `--save_gif`, to save the animation to a gif
+
+Enjoy creating pretty animations!
