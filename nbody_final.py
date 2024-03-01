@@ -472,7 +472,7 @@ if __name__ == '__main__':
             particles[i].set_3d_properties(r[t_step:t_step+1,2]) # Z axis
 
     # animate N_steps frames with interval 1ms between frames
-    anim = FuncAnimation(fig, animate, frames=N_steps+1, fargs=(N_obj,r_v_total,trajectories,particles,t), interval=1, blit=True)
+    anim = FuncAnimation(fig, animate, frames=N_steps+1, fargs=(N_obj,r_v_total,trajectories,particles,t), interval=1, blit=False)
 
     # ax.view_init(azim=90, elev=0)
     ax.set_xlim3d([min_xyz,max_xyz])
