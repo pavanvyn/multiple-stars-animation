@@ -16,8 +16,11 @@ It is recommended to not specify the true anomalies since they only specify the 
 
 Other arguments control the animation itself, and are as follows:
 - `-N` or `--N_steps`, the number of integration time-steps (and thus the length of the animation), the default being 1000
+- `-D` or `--dt_step`, the standard timestep in years (will reduce when particles are too close), the default being 0.25
 - `-F` or `--fade_factor`, the rate of fading trajectory trails, the default being 0.05 (0 is no fade, < 0.05 for best results)
 - `-L` or `--light_mode`, to switch the default dark mode to light
 - `-S` or `--save_gif`, to save the animation to a gif
+
+If the trajectory is jagged or badly timed, reduce `--dt_step`, but try to keep it as high as possible (the default may be too low depending on your parameters).
 
 Enjoy creating cool animations! A suite of pre-made animations are provided in this repository.
