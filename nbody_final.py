@@ -46,12 +46,12 @@ def func_r_v_dot(r_v,t,N_obj,m): # r_v (positions and velocities) and m (masses)
     return r_v_dot
 
 # function which returns adaptive time-steps
-def func_adapt_dt(r_v,N_obj,m): # r_v (positions and velocities) and m (masses) should numpy arrays
+def func_adapt_dt(r_v,N_obj,m,dt_step): # r_v (positions and velocities) and m (masses) should numpy arrays
     r_v = np.array(r_v) # shape (N_obj*6)
     m = np.array(m)
     eps = 0
 
-    dt = yr # standard time-step
+    dt = dt_step
 
     assert r_v.shape == (N_obj*6,)
     assert m.shape == (N_obj,)
@@ -73,11 +73,11 @@ def func_adapt_dt(r_v,N_obj,m): # r_v (positions and velocities) and m (masses) 
                 v_ij_norm = np.linalg.norm(v_ij)
                 a_ij_norm = G*m_j/r_ij_norm**2
                 if v_ij_norm == 0 and a_ij_norm != 0:
-                    dt_min = np.sqrt(r_ij_norm/a_ij_norm)/4
+                    dt_min = np.sqrt(r_ij_norm/a_ij_norm)
                 elif v_ij_norm != 0 and a_ij_norm == 0:
-                    dt_min = (r_ij_norm/v_ij_norm)/4
+                    dt_min = (r_ij_norm/v_ij_norm)
                 elif v_ij_norm != 0 and a_ij_norm != 0:
-                    dt_min = min([(r_ij_norm/v_ij_norm)/4,np.sqrt(r_ij_norm/a_ij_norm)/4]) # approximate timescale which needs to be resolved
+                    dt_min = min([(r_ij_norm/v_ij_norm),np.sqrt(r_ij_norm/a_ij_norm)]) # approximate timescale which needs to be resolved
                 else:
                     dt_min = dt
                 if dt_min < dt:
@@ -292,6 +292,7 @@ if __name__ == '__main__':
     parser.add_argument("-w","--APs",help="list of arguments of periapsis in deg (between 0 and 360)",default=None)
     parser.add_argument("-t","--tAnos",help="list of true anomalies in deg (between 0 and 360)",default=None)
     parser.add_argument("-N","--N_steps",help="number of time steps",default=1000,type=int)
+    parser.add_argument("-D","--dt_step",help="standard time step in yr (unless particles come too close)",default=0.25,type=float)
     parser.add_argument("-F","--fade_factor",help="rate of fading trajectory trails (0 is no fade, < 0.05 for best results)",default=0.01,type=float)
     parser.add_argument("-L","--light_mode",help="aimation in light mode (default dark)",action="store_true")
     parser.add_argument("-S","--save_gif",help="save GIF or not",action="store_true")
@@ -418,6 +419,7 @@ if __name__ == '__main__':
 
     # setting up for actual integration and eventual animation    
     N_steps = args.N_steps
+    dt_step = args.dt_step
 
     t = np.zeros(N_steps+1)
     r_v_total = np.zeros((N_steps+1,N_obj,6)) # stores positions and velocities after each time-step
@@ -425,7 +427,7 @@ if __name__ == '__main__':
 
     r_v_evolve = r_v_0 # position and velocity at a given evolution time
     for step in range(N_steps):
-        dt_evolve = func_adapt_dt(r_v_evolve,N_obj,m)
+        dt_evolve = func_adapt_dt(r_v_evolve,N_obj,m,dt_step*yr)
         r_v_evolve = odeint(func_r_v_dot,r_v_evolve,[0,dt_evolve],args=(N_obj,m))[1] # shape 1 X (N_obj*6) -- (0th element is not relevant)
 
         t[step+1] = t[step]+dt_evolve
