@@ -20,4 +20,4 @@ Other arguments control the animation itself, and are as follows:
 - `-L` or `--light_mode`, to switch the default dark mode to light
 - `-S` or `--save_gif`, to save the animation to a gif
 
-Enjoy creating pretty animations!
+Enjoy creating pretty animations! A suite of pre-made animations are provided in this repository.
