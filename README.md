@@ -1,3 +1,3 @@
-# Create a pretty hierarchical multiple animation
+# Create pretty animations of binaries, triples and quadruples
 
-This is a python3-based simple N-body integrator and animator of binary-, triple- and quadruple-star systems. The code will be edited for a better UI, but for now, running the python module produces an animation of a stable triple-star system. To run a binary and/or 3+1/2+2 quadruple systems, uncomment the respective blocks in the python module. Change the position and velocity parameters for different orbits, possibly unstable.
+This is a python3-based simple N-body integrator and animator for 2-body, 3-body and 4-body systems. The initial conditions can be supplied in hierarchical coordinates: masses and orbital parameters, including semimajor axes, eccentricities, and orbital angles.
