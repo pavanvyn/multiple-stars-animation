@@ -13,7 +13,8 @@ The following arguments can be specified to change the initial parameters of a g
 - `-w` or `--APs`
 - `-t` or `--tAnos`
 
-- `-N` or `--N_steps`
-- `-F` or `--fade_factor`
+Other arguments control the animation itself, and are as follows:
+- `-N` or `--N_steps`, which determines the number of integration time-steps (and thus the length of the animation), with a default of 1000
+- `-F` or `--fade_factor`, which determines the rate of fading trajectory trails, with a default of 0.05 (0 is no fade, < 0.05 for best results)
 - `-L` or `--light_mode`
 - `-S` or `--save_gif`
