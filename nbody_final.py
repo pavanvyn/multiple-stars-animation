@@ -444,10 +444,6 @@ if __name__ == '__main__':
     ax = fig.add_subplot(projection='3d')
     fig.subplots_adjust(left=0,right=1,bottom=0,top=1)
     ax.axis('off')
-    # ax.grid(None)
-    # ax.xaxis.pane.fill = False
-    # ax.yaxis.pane.fill = False
-    # ax.zaxis.pane.fill = False
 
     trajectories = [LineCollection([],lw=2,color=colors[i]) for i in range(N_obj)]
     for i in range(N_obj):
